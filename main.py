@@ -2,11 +2,13 @@ import numpy as np
 import pandas as pd
 from collections import Counter
 import dash
+import os
 from dash import Dash, dcc, html, Input, Output, State
-
+import base64
 import numpy as np               # for linear algebra
 import pandas as pd              # for tabular output
 from scipy.stats import rankdata # for ranking the candidates
+from select_worker import calculate_best_choise
 
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -51,26 +53,88 @@ print(data.years_experience)
 # 1) shoe distrebution of different features: experience, education, epxert, sex
 # 2) create ideal position
 
-
 app = Dash(__name__)
+# app.layout = html.Div([
+#     dcc.Dropdown(data["gndr"].unique(), id='gndr_dropdown'),
+#     dcc.Dropdown(data["pri_spec"].unique(), id='pri_spec_dropdown'),
+#     html.Div(id='pandas-output-container-2'),
+#     html.Br(),
+#     html.Br(),
+#     html.Div(id='result')
+#
+# ])
+
+
 app.layout = html.Div([
-    dcc.Dropdown(data["gndr"].unique(), id='pandas-dropdown-2'),
-    html.Div(id='pandas-output-container-2')
-])
+    # Title
+    html.H1('Welcome to stuff selecting App!', style={
+        'textAlign': 'center',
+        'color': '#444444',
+        'fontSize': 24
+    }),
+    # Text
+    html.P(['Please select gender of the worker that you want to hire', html.Br(), ' Also , select the specefication that you need to hire to.'
+                                                                                ,html.Br(),
+           'The program will access the biggest dataset avaliable and you will recieve the best option ! '], style={
+        'textAlign': 'center',
+        'color': '#666666',
+        'fontSize': 16
+    }),
 
+    dcc.Dropdown(data["gndr"].unique(), id='gender_filter', style={'width': '50%', 'textAlign': 'center',
+        'color': '#666666',
+        'fontSize': 16,},value='M'),
+    dcc.Dropdown(data["pri_spec"].unique(), id='spec_filter', style={'width': '50%', 'textAlign': 'center',
+        'color': '#666666',
+        'fontSize': 16}, value='CHIROPRACTIC'),
+    html.Div(id='out', style={'width': '50%', 'textAlign': 'center',
+        'color': '#666666',
+        'fontSize': 16}),
 
-@app.callback(
-    Output('pandas-output-container-2', 'children'),
-    Input('pandas-dropdown-2', 'value')
+],
+style={
+        'textAlign': 'center',
+        'color': '#666666',
+        'fontSize': 16
+    }
+# , style = {
+#     'width': '80%',
+#     'marginLeft': 'auto',
+#     'marginRight': 'auto',
+#     'paddingTop': 20,
+#     'paddingBottom': 20}
 )
-def update_output(value):
-    return f'You have selected {value}'
+
+
+# @app.callback(
+#     Output('pandas-output-container-2', 'children'),
+#     Input('gndr_dropdown', 'value'),
+#     Input('pri_spec_dropdown', 'value')
+# )
+@app.callback(
+    Output(component_id='out', component_property='children'),
+    [Input('gender_filter', 'value'),
+     Input('spec_filter', 'value')]
+)
+
+def update_output(gender_filter, spec_filter):
+    # return f'You have selected {value1} , {value2}'
+    # path = r"C:\Users\IlyaY\Desktop\לימודים\תשפג\א\אלגו\project\data\less_data.csv"
+    # gender_filter = 'M'
+    # spec_filter = 'CHIROPRACTIC'
+    try:
+        return f"{calculate_best_choise(gender_filter, spec_filter)}"
+    except:
+        return "No such query"
+
+
+
 
 
 if __name__ == '__main__':
     app.run_server(debug=True)
 
-
+#  todo: fix refreshing
 
 
 
