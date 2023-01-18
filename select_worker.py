@@ -65,7 +65,9 @@ def smart(raw_data, candidates):
                 score += (raw_data.iloc[inx][col] * weights[index_of_col]) * benefit_attributes[index_of_col]
             score_total[cand] = score
 
-
+    print("total score:")
+    print(score_total)
+    print(" ")
     # Sort the scores dictionary by value in descending order
     sorted_scores = sorted(score_total.items(), key=lambda x: x[1], reverse=True)
 
@@ -82,6 +84,9 @@ def borda(raw_data, candidates):
     #normalize data
     raw_data = (raw_data - raw_data.mean()) / raw_data.std()
     raw_data['cred_number'] = raw_data['cred_number'].fillna(0)
+    print("normalized data:")
+    print(raw_data)
+    print(" ")
 
     benefit_attributes = [1, -1, 1, 1, 1, 1, 1, -1]
 
@@ -93,8 +98,13 @@ def borda(raw_data, candidates):
             borda_count += (raw_data.iloc[inx][col] * weights[index_of_col]) * benefit_attributes[index_of_col]
         borda_counts[cand] = borda_count
 
+    print(" Borda counts:")
+    print(borda_counts)
+    print(" ")
     # Sort the options by Borda count in descending order
+
     sorted_options = sorted(borda_counts.items(), key=lambda x: x[1], reverse=True)
+    print(sorted_options[0])
 
     # print(f"The best candidate/alternative according to C* is {int(np.max(sorted_options))}")
     return sorted_options[0][0]  # return int(np.max(sorted_options))

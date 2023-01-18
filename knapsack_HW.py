@@ -19,6 +19,7 @@ def knapsack(items, max_weight):
 
 
 # Test the function
-items = [("item1", 3, 10), ("item2", 8, 4), ("item3", 9, 9), ("item4", 8, 11)]  # , ("item5", 9, 10)
+items = [("item1", 20, 30), ("item2", 18, 25), ("item3", 17, 20), ("item4", 15, 18), ("item4", 15, 17)
+         , ("item4", 10, 11), ("item4", 5, 5), ("item4", 3, 2), ("item4", 1, 1), ("item4", 1, 1)]  # , ("item5", 9, 10)
 
-print(f"The maximum value of the sack is {knapsack(items, 20)}")
+print(f"The maximum value of the sack is {knapsack(items, 70)}")
